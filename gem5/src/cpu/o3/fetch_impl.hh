@@ -170,6 +170,8 @@ FetchStatGroup::FetchStatGroup(O3CPU *cpu, DefaultFetch *fetch)
      "Number of cycles fetch is stalled on an Icache miss"),
     ADD_STAT(insts, "Number of instructions fetch has processed"),
     ADD_STAT(branches, "Number of branches that fetch encountered"),
+    ADD_STAT(forwardBranches, "Number of forward branches that fetch encountered"),
+    ADD_STAT(backwardBranches, "Number of backward branches that fetch encountered"),
     ADD_STAT(predictedBranches,
      "Number of branches that fetch has predicted taken"),
     ADD_STAT(cycles,
@@ -212,6 +214,10 @@ FetchStatGroup::FetchStatGroup(O3CPU *cpu, DefaultFetch *fetch)
             .prereq(insts);
         branches
             .prereq(branches);
+	forwardBranches
+	    .prereq(forwardBranches);
+	backwardBranches
+	    .prereq(backwardBranches);
         predictedBranches
             .prereq(predictedBranches);
         cycles
@@ -526,8 +532,8 @@ DefaultFetch<Impl>::lookupAndUpdateNextPC(
     // Do branch prediction check here.
     // A bit of a misnomer...next_PC is actually the current PC until
     // this function updates it.
-    bool predict_taken;
 
+    bool predict_taken;
     if (!inst->isControl()) {
         TheISA::advancePC(nextPC, inst->staticInst);
         inst->setPredTarg(nextPC);
@@ -555,8 +561,13 @@ DefaultFetch<Impl>::lookupAndUpdateNextPC(
     inst->setPredTarg(nextPC);
     inst->setPredTaken(predict_taken);
 
-    ++fetchStats.branches;
+    // set up to determine forward or backward branching
+   // TheISA::PCState destReg = instr->
 
+	
+    // check the direction of the predicted branch
+    if (0/* branch is forward*/) ++fetchStats.forwardBranches;
+    if (0/* branch is backward*/) ++fetchStats.backwardBranches; 
     if (predict_taken) {
         ++fetchStats.predictedBranches;
     }

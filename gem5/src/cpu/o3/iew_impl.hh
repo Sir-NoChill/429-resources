@@ -209,6 +209,14 @@ DefaultIEW<Impl>::regStats()
 
     branchMispredicts = predictedTakenIncorrect + predictedNotTakenIncorrect;
 
+    forwardBranchesEx
+	.name(name() + ".forwardBranches")
+	.desc("Number of forward branches detected at execute");
+
+    backwardBranchesEx
+	.name(name() + ".forwardBranches")
+	.desc("Number of forward branches detected at execute");
+
     iewExecutedInsts
         .name(name() + ".iewExecutedInsts")
         .desc("Number of executed instructions");
@@ -1248,6 +1256,30 @@ DefaultIEW<Impl>::executeInsts()
         // Notify potential listeners that this instruction has started
         // executing
         ppExecute->notify(inst);
+
+	    // check the branch direction if this branch is a branch
+	    if (inst->isControl()) {
+
+
+
+	        // check if the instruction is dynamic or static
+	        if (inst->isDirectCtrl()) {
+	    	    // check if the branch direction is forward or backward
+	        	if (instr->branchTarget(inst->pcState) /* TODO */) {
+	    	        ++forwardBranchesEx;
+	            } else {
+                    ++backwardBranchesEx;
+                }
+	        } else {
+	    	    // check if the branch direction is forward or backward
+	        	if (instr->branchTarget(inst->threadNumber) /* TODO */) {
+	    	        ++forwardBranchesEx;
+	            } else {
+	    	        ++backwardBranchesEx;
+	            }
+            }
+        }
+
 
         // Check if the instruction is squashed; if so then skip it
         if (inst->isSquashed()) {

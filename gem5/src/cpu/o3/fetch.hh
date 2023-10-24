@@ -557,7 +557,11 @@ class DefaultFetch
         Stats::Scalar insts;
         /** Total number of fetched branches. */
         Stats::Scalar branches;
-        /** Stat for total number of predicted branches. */
+        /** Total number of fetched forward branches. */
+	Stats::Scalar forwardBranches;
+	/** Total number of fetched backward branches. */
+	Stats::Scalar backwardBranches;	
+	/** Stat for total number of predicted branches. */
         Stats::Scalar predictedBranches;
         /** Stat for total number of cycles spent fetching. */
         Stats::Scalar cycles;

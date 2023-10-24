@@ -456,7 +456,10 @@ class DefaultIEW
     Stats::Scalar predictedNotTakenIncorrect;
     /** Stat for total number of mispredicted branches detected at execute. */
     Stats::Formula branchMispredicts;
-
+    /** Stat for total number of forward branches detected at execute */
+    Stats::Scalar forwardBranchesEx;
+    /** Stat for total number of forward branches detected at execute */
+    Stats::Scalar backwardBranchesEx;
     /** Stat for total number of executed instructions. */
     Stats::Scalar iewExecutedInsts;
     /** Stat for total number of executed load instructions. */
